@@ -60,8 +60,13 @@ app.post('/movies', async (req, res) =>{ //Operación para dar de alta película
     res.status(201).json({}); //200 es un ok a la operación, y 201 es un ok a la operación de registro
 });
 
-app.put('/movies/:title', (req, res) =>{ //Dado un título concreto, modificamos los datos de la película con la que se corresponde
- 
+app.put('/movies/:title', async (req, res) => { //Dado un título concreto, modificamos los datos de la película con la que se corresponde
+    await db ('movies').update({
+        title: req.body.title,
+        description: req.body.description,
+        year: req.body.year
+    }).where({title: req.params.title});
+    res.status(200).json({});
 });
 
 app.delete('/movies/:title', (req, res) =>{ //Borrar películas
