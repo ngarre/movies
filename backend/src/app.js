@@ -51,14 +51,30 @@ app.get('/movies/:title', async (req, res) =>{ //Operación para ver info de una
     res.json(movie); //Devuelve la infromación de la película cuyo título se ha proporcionado en formato json
 });
 
-app.post('/movies', async (req, res) =>{ //Operación para dar de alta películas en la BBDD
+/* app.post('/movies', async (req, res) =>{ //Operación para dar de alta películas en la BBDD
     await db('movies').insert({
         title: req.body.title,
         description: req.body.description,
         year: req.body.year
     });
     res.status(201).json({}); //200 es un ok a la operación, y 201 es un ok a la operación de registro
+}); */
+
+app.post('/movies', async (req, res) => {
+    try {
+        // Operación para dar de alta películas en la BBDD
+        await db('movies').insert({
+            title: req.body.title,
+            description: req.body.description,
+            year: req.body.year
+        });
+        res.status(201).json({ message: 'Película registrada con éxito' }); // Respuesta exitosa
+    } catch (error) {
+        console.error('Error al registrar la película:', error); // Log del error en la consola
+        res.status(500).json({ error: 'Ocurrió un error al registrar la película', details: error.message }); // Respuesta con error
+    }
 });
+
 
 app.put('/movies/:title', async (req, res) => { //Dado un título concreto, modificamos los datos de la película con la que se corresponde
     await db ('movies').update({
