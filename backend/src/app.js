@@ -69,9 +69,15 @@ app.put('/movies/:title', async (req, res) => { //Dado un título concreto, modi
     res.status(200).json({});
 });
 
-app.delete('/movies/:title', (req, res) =>{ //Borrar películas
+app.delete('/movies/:title', async (req, res) =>{ //Borrar películas
+    await db('movies').del().where({ title: req.params.title });
 
+    res.status(204).json({});
 });
+
+//app.patch('/movies/:title', async (req, res) => { Esta operación se hace para cambiar un campo específico, al contrario que el put que nos permite modificar todo.
+    
+//});                                               Al final esto no lo hacemos porque es demasiado rebuscado teniendo el put.
 
 
 app.listen(8080, () => { 
